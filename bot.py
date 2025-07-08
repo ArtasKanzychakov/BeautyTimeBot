@@ -21,7 +21,7 @@ load_dotenv()
 TOKEN = os.getenv("TELEGRAM_API_KEY")
 ADMIN_CHAT_ID = int(os.getenv("ADMIN_CHAT_ID"))
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")  # https://beautytimebot-quw2.onrender.com
-WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET")  # 5000
+WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET")  # 614200601c1fe24c024262b84559a683
 
 services = {
     "Оформление бровей": "30 мин",
@@ -108,6 +108,6 @@ app.add_handler(MessageHandler(filters.TEXT & filters.Regex(r'^\d{1,2}:\d{2}$'),
 app.run_webhook(
     listen="0.0.0.0",
     port=5000,
-    webhook_url=f"{WEBHOOK_URL}/5000",  # <-- ВАЖНО!
-    secret_token="5000"
+    webhook_url=f"{https://beautytimebot-quw2.onrender.com}/614200601c1fe24c024262b84559a683",  # <-- ВАЖНО!
+    secret_token="614200601c1fe24c024262b84559a683"
 )
