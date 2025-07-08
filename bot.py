@@ -115,6 +115,6 @@ app.add_handler(MessageHandler(filters.TEXT & filters.Regex(r'^\d{1,2}:\d{2}$'),
 app.run_webhook(
     listen="0.0.0.0",
     port=5000,
-    webhook_url="https://beautytimebot-quw2.onrender.com/614200601c1fe24c024262b84559a683"  # <-- правильно
-    secret_token=WEBHOOK_SECRET
+    webhook_url="https://beautytimebot-quw2.onrender.com/614200601c1fe24c024262b84559a683",  # <-- ОБЯЗАТЕЛЬНО ЗАПЯТАЯ
+    secret_token="614200601c1fe24c024262b84559a683"
 )
