@@ -20,8 +20,8 @@ load_dotenv()
 
 TOKEN = os.getenv("TELEGRAM_API_KEY")
 ADMIN_CHAT_ID = int(os.getenv("ADMIN_CHAT_ID"))
-WEBHOOK_URL = os.getenv("WEBHOOK_URL")
-WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET")
+WEBHOOK_URL = os.getenv("WEBHOOK_URL")  # https://beautytimebot-quw2.onrender.com
+WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET")  # 5000
 
 services = {
     "Оформление бровей": "30 мин",
@@ -73,7 +73,6 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if query.data.startswith("date_"):
         date_str = query.data.replace("date_", "")
         context.user_data["date"] = date_str
-
         await query.message.reply_text("Напишите удобное время (например: 14:30):")
 
 
@@ -92,24 +91,23 @@ async def handle_time(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         await update.message.reply_text("Спасибо! Ваша заявка отправлена.")
         await context.bot.send_message(chat_id=ADMIN_CHAT_ID, text=message)
-
-        # Очистка
         context.user_data.clear()
     else:
         await update.message.reply_text("Пожалуйста, выберите услугу сначала (/start).")
+
 
 # Создание и запуск бота с вебхуком
 app = ApplicationBuilder().token(TOKEN).build()
 
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CallbackQueryHandler(handle_callback))
-app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_service))
+app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND & ~filters.Regex(r'^\d{1,2}:\d{2}$'), handle_service))
 app.add_handler(MessageHandler(filters.TEXT & filters.Regex(r'^\d{1,2}:\d{2}$'), handle_time))
 
-# Запуск с вебхуком
+# Запуск вебхука
 app.run_webhook(
     listen="0.0.0.0",
     port=5000,
-    webhook_url=f"{WEBHOOK_URL}/{WEBHOOK_SECRET}",
-    secret_token=WEBHOOK_SECRET,
+    webhook_url=f"{WEBHOOK_URL}/5000",  # <-- ВАЖНО!
+    secret_token="5000"
 )
