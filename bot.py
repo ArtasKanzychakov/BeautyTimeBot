@@ -20,8 +20,8 @@ load_dotenv()
 
 TOKEN = os.getenv("TELEGRAM_API_KEY")
 ADMIN_CHAT_ID = int(os.getenv("ADMIN_CHAT_ID"))
-WEBHOOK_URL = os.getenv("WEBHOOK_URL")  # https://beautytimebot-quw2.onrender.com
-WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET")  # 614200601c1fe24c024262b84559a683
+WEBHOOK_URL = os.getenv("WEBHOOK_URL")  # Пример: https://beautytimebot-quw2.onrender.com
+WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET")  # Пример: 614200601c1fe24c024262b84559a683
 
 services = {
     "Оформление бровей": "30 мин",
@@ -81,6 +81,13 @@ async def handle_time(update: Update, context: ContextTypes.DEFAULT_TYPE):
     date = context.user_data.get("date")
     time = update.message.text
 
+    # Проверка времени
+    try:
+        datetime.strptime(time, "%H:%M")
+    except ValueError:
+        await update.message.reply_text("Пожалуйста, введите время в формате ЧЧ:ММ, например 14:30.")
+        return
+
     if service and date:
         message = (
             f"📋 Новая запись!\n"
@@ -108,6 +115,6 @@ app.add_handler(MessageHandler(filters.TEXT & filters.Regex(r'^\d{1,2}:\d{2}$'),
 app.run_webhook(
     listen="0.0.0.0",
     port=5000,
-    webhook_url=f"{https://beautytimebot-quw2.onrender.com}/614200601c1fe24c024262b84559a683",  # <-- ВАЖНО!
-    secret_token="614200601c1fe24c024262b84559a683"
+    webhook_url=f"{WEBHOOK_URL}/{WEBHOOK_SECRET}",  # <-- правильно
+    secret_token=WEBHOOK_SECRET
 )
